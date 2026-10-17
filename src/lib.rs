@@ -1,3 +1,5 @@
+//! Injectable interfaces for operating-system and external service boundaries.
+
 // Re-use
 
 #[cfg(all(feature = "clock", feature = "mock"))]
@@ -14,6 +16,9 @@ pub use self::http::MockHttpServer;
 pub use self::http::{DefaultHttpServer, HttpRequest, HttpResponse, HttpServer};
 #[cfg(any(feature = "mock", test))]
 pub use self::mock::Mock;
+#[cfg(feature = "mock")]
+pub use self::native_env::MockNativeEnv;
+pub use self::native_env::{DefaultNativeEnv, NativeEnv};
 #[cfg(all(feature = "uuid", feature = "mock"))]
 pub use self::uuid::MockUuidGenerator;
 #[cfg(feature = "uuid")]
@@ -36,6 +41,7 @@ mod env;
 mod http;
 #[cfg(any(feature = "mock", test))]
 mod mock;
+mod native_env;
 mod sys;
 #[cfg(feature = "uuid")]
 mod uuid;

@@ -95,3 +95,33 @@ jobs:
       with:
         args: --all-features --examples
         command: test
+
+  native-environment:
+    name: Native environment (${{ matrix.os }}, Rust 1.88)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Rust 1.88
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: 1.88.0
+        profile: minimal
+        override: true
+
+    - name: Check without optional features
+      run: cargo +1.88.0 check --no-default-features
+
+    - name: Check mock adapter
+      run: cargo +1.88.0 check --no-default-features --features mock
+
+    - name: Test native environment
+      run: cargo +1.88.0 test --no-default-features --features mock --test native_env
+
+    - name: Test native environment example
+      run: cargo +1.88.0 test --no-default-features --features mock --example native_env

@@ -40,6 +40,25 @@ The [`Env`](https://docs.rs/mockable/latest/mockable/trait.Env.html) trait provi
 
 [Example](examples/env.rs).
 
+## Native environment
+
+`NativeEnv` reads native `OsStr` keys and returns owned `OsString` values and
+complete native key/value snapshots. `DefaultNativeEnv` reads the process
+without Unicode conversion; `MockNativeEnv` is available with the existing
+`mock` feature. Inject a reader into code that needs native paths or complete
+enumeration. Existing `Env` methods and their Unicode behavior are unchanged.
+Known string-key callers can also recover a non-Unicode value from
+`Env::raw`'s `VarError::NotUnicode` without migrating APIs.
+
+[Example](examples/native_env.rs).
+
+The private integration-test child harness in `tests/native_env.rs` belongs
+only to these native-reader regressions. It supplies an isolated environment
+through `Command`, checks native bytes or Windows wide units without printing
+the environment, and bounds its own child process lifetime. Its controller
+uses an independent fixed-key lookup so an adapter defect cannot recursively
+spawn test children. It is not a general process runner or a consumer adapter.
+
 ## HTTP Server
 
 The [`HttpServer`](https://docs.rs/mockable/latest/mockable/trait.HttpServer.html) trait provides a way to mock a HTTP server.
