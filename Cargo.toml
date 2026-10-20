@@ -38,3 +38,7 @@ version = "3.0.0"
 
 [package.metadata.docs.rs]
 all-features = true
+
+[profile.dev]
+incremental = false
+debug = 0
